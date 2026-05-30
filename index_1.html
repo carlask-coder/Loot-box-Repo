@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0a140a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Loot Box">
+<title>CEO Loot Box</title><link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAC7ElEQVR4nO3TsU0DARBFQceOiWjCKQFIjl0EsXuhCCjJHR0dIB0S7N29CV6++to53T7fFqnaafoAaTIAlA4ApQNA6QBQOgCUDgClA0DpAFA6AJQOAKVbDeD8dNYPLY/rqqbvPVoADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsuwfggWbb+/4AKL0/AErvD4DS+wOg9P4AKL0/AErvD4DS+wOg9P4AKL0/AErvD4DS+28OwO3yLP06AJQOAKUDQOkAUDoAlA4ApQNA6QBQOgCUDgClA0DpcgC+7i86cAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEAQDoAAEgHAADpAAAgHQAApAMAgHQAAJAOAADSAQBAOgAASAcAAOkAACAdAACkA0BaEQBKB4DSAaB0ACgdAEoHgNIBoHQAKB0ASgeA0gGgdDkAH++vOnAAAJAOAADSAQBAOgAASAcAAOkAACAdAACkAwCAdAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEAQDoAAEgHAADpAAAgHQAApANgZwCWx3XXTe8HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABsqukHBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbSwAAEgHAADpAAAgHQAApAMAgHQAAJAOAADSAQBAOgAASAcAAOkAACAdAACkAwCAdAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEgrQgApQNA6QBQOgCUDgClA0DpAFA6AJQOAKUDQOkAULrdA5D+MwCUDgClA0DpAFA6AJQOAKUDQOkAUDoAlA4ApQNA6f4cgHSkAFA6AJQOAKUDQOkAUDoAlA4ApQNA6QBQOgCUDgCl+wY7ybFJX7kStQAAAABJRU5ErkJggg=="><style>
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#07090f;font-family:"Press Start 2P",monospace;overflow-x:hidden;overscroll-behavior:none}
+::-webkit-scrollbar{width:6px;background:#111}::-webkit-scrollbar-thumb{background:#4a9f3d}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges}
+@keyframes titleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes shimmer{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes popIn{0%{opacity:0;transform:scale(.8) translateY(-10px)}70%{transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{from{opacity:.5}to{opacity:1}}
+@keyframes catBounce{0%,100%{transform:translateY(0) rotate(0)}40%{transform:translateY(-10px) rotate(-12deg)}70%{transform:translateY(-4px) rotate(6deg)}}
+@keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-28px)}70%{transform:translateY(-8px)}}
+.jumping{animation:jump .55s cubic-bezier(.34,1.56,.64,1)}
+.catjump{animation:catBounce .55s ease}
+.glowing{filter:drop-shadow(0 0 8px #ffd040) drop-shadow(0 0 4px #fff)}
+.shadow-el{width:40px;height:4px;background:rgba(0,0,0,.35);border-radius:50%;filter:blur(2px)}
+.particle{position:fixed;width:8px;height:8px;pointer-events:none;z-index:9999;image-rendering:pixelated;box-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.btn{font-family:"Press Start 2P",monospace;font-size:13px;color:#fff;border:none;outline:none;cursor:pointer;padding:22px 24px;width:100%;text-align:center;letter-spacing:1px;line-height:1.8;text-shadow:2px 2px 0 rgba(0,0,0,.8);image-rendering:pixelated;transition:transform .05s,box-shadow .05s;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.btn:active{transform:translateY(6px)!important}
+.btn-green{background:#4a9f3d;box-shadow:6px 6px 0 #2d6b25,inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.25)}
+.btn-green:active{box-shadow:inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.2)}
+.btn-gold{background:#d4a017;box-shadow:6px 6px 0 #8a6500,inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.25)}
+.btn-gold:active{box-shadow:inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.2)}
+.btn-grey{background:#444;box-shadow:6px 6px 0 #222,inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.1)}
+.card{border:3px solid #2a2a2a;padding:12px;margin-bottom:8px;background:#111;box-shadow:2px 2px 0 #000}
+.card.revealed{animation:popIn .45s cubic-bezier(.34,1.56,.64,1)}
+.card-locked{display:flex;align-items:center;gap:10px;font-size:7px;color:#333}
+.card-title{font-size:8px;line-height:2;word-break:break-word;margin-bottom:5px}
+.card-class{font-size:6px;margin-bottom:8px;font-style:italic;line-height:1.8}
+.step{font-family:"VT323",monospace;font-size:17px;margin-bottom:2px;line-height:1.4;padding-left:8px;color:#ddd;border-left:3px solid #333}
+.step.cleanup{color:#ffd040;border-left-color:#ffd040}
+#wrap{max-width:480px;margin:0 auto;position:relative;z-index:1}
+#header{background:#0a140a;border:3px solid #4a9f3d;border-top:none;padding:14px 16px 12px;box-shadow:4px 4px 0 #000}
+#content{padding:12px 14px 100px}
+#chest-area{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:10px}
+#briefing-end{text-align:center;font-size:8px;color:#ffd040;padding:16px;border:3px solid #ffd040;background:#1a1200;box-shadow:4px 4px 0 #000;animation:shimmer 1.5s infinite;line-height:2.5;margin-top:8px;display:none}
+#error-box{font-size:7px;color:#ff5555;text-align:center;padding:12px;border:2px solid #ff5555;background:#1a0000;margin-bottom:12px;line-height:2;display:none}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="landscape" style="display:block;width:100%"></canvas>
+  <div id="scene" style="position:relative">
+    <div id="chars" style="position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-end;padding:0 12px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="font-size:6px;color:#ffd040;text-shadow:1px 1px 0 #000">GIGI</div>
+        <canvas id="gigi"></canvas>
+        <div class="shadow-el"></div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:flex-end;margin-bottom:4px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+          <canvas id="chewy"></canvas>
+          <div style="font-size:5px;color:#ccc;text-shadow:1px 1px 0 #000">CHEWY</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+          <canvas id="marsh"></canvas>
+          <div style="font-size:5px;color:#ccc;text-shadow:1px 1px 0 #000">MARSH</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1px">
+          <canvas id="anakin"></canvas>
+          <div style="font-size:5px;color:#ccc;text-shadow:1px 1px 0 #000">ANAKIN</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div style="font-size:6px;color:#ffd040;text-shadow:1px 1px 0 #000">GARRETT</div>
+        <canvas id="garrett" style="transform:scaleX(-1)"></canvas>
+        <div class="shadow-el"></div>
+      </div>
+    </div>
+  </div>
+  <div id="header">
+    <div style="text-align:center;font-size:12px;color:#ffd040;text-shadow:2px 2px 0 #000;animation:titleFloat 2.5s ease infinite;line-height:1.8;margin-bottom:4px">&#127919; CEO LOOT BOX &#127919;</div>
+    <div style="text-align:center;font-size:7px;color:#7ec850;line-height:2">TOP SECRET MISSION HQ</div>
+    <div id="chest-area">
+      <div style="position:relative;width:72px;height:64px">
+        <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:#8B5E3C;border:3px solid #4a2f1a;box-shadow:inset 2px 2px 0 rgba(255,255,255,.15),3px 3px 0 #000">
+          <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:12px;height:9px;background:#d4a017;border:2px solid #8a6500"></div>
+          <div style="position:absolute;bottom:5px;left:5px;right:5px;height:5px;background:#3a1f0a;border:1px solid #2a1000">
+            <div id="chest-bar" style="height:100%;width:0%;background:#7ec850;transition:width .4s"></div>
+          </div>
+        </div>
+        <div id="chest-lid" style="position:absolute;top:18px;left:0;right:0;height:26px;background:#a06838;border:3px solid #4a2f1a;box-shadow:inset 2px 2px 0 rgba(255,255,255,.15);transform-origin:bottom center;transition:all .3s ease">
+          <div style="position:absolute;top:5px;left:4px;right:4px;height:2px;background:rgba(0,0,0,.2)"></div>
+          <div style="position:absolute;top:11px;left:4px;right:4px;height:2px;background:rgba(0,0,0,.2)"></div>
+        </div>
+        <div id="chest-glow" style="display:none;position:absolute;bottom:14px;left:50%;transform:translateX(-50%);width:36px;height:18px;background:radial-gradient(ellipse,rgba(255,208,64,.9) 0%,transparent 70%);animation:glow .4s ease infinite alternate"></div>
+      </div>
+      <div id="chest-counter" style="font-size:7px;color:#7ec850"></div>
+    </div>
+  </div>
+  <div id="content">
+    <div style="margin-bottom:14px">
+      <button id="main-btn" class="btn btn-gold" onclick="handleBtn()">&#128272; GET LOOT BOX</button>
+    </div>
+    <div id="error-box"></div>
+    <div id="missions"></div>
+    <div id="briefing-end">&#128272; END OF BRIEFING<br>GOOD LUCK, AGENTS &#128272;</div>
+  </div>
+</div>
+<script>
+function drawPixels(canvas,pixels,palette,scale){
+  const rows=pixels.length,cols=pixels[0].length;
+  canvas.width=cols*scale;canvas.height=rows*scale;
+  const ctx=canvas.getContext("2d");ctx.imageSmoothingEnabled=false;
+  pixels.forEach((row,y)=>{[...row].forEach((ch,x)=>{
+    const color=palette[ch];if(!color)return;
+    ctx.fillStyle=color;ctx.fillRect(x*scale,y*scale,scale,scale);
+    ctx.fillStyle="rgba(255,255,255,0.15)";ctx.fillRect(x*scale,y*scale,scale,1);ctx.fillRect(x*scale,y*scale,1,scale);
+    ctx.fillStyle="rgba(0,0,0,0.2)";ctx.fillRect(x*scale,(y+1)*scale-1,scale,1);ctx.fillRect((x+1)*scale-1,y*scale,1,scale);
+  });});
+}
+const GIGI_PIX=["....HHHHHHHH....","...HHHHHHHHHH...","..HHHSSSSSSHHH..","..HHSSSSSSSSHH..","..HHSSESSESSHH..","..HHSSSSSSSSHH..","..HHSSSMSSSHH...","..HHHSSSSSSHHH...","...HHHHHHHHHH...",".....SSSSSS.....",".....SSSSSS.....","....PPPPPPPP....","...PPPPPPPPPP...","...PPPPPPPPPP...","...PPPPPPPPPP...","...PPPPPPPPPP....","....PPPPPPPP....","....DDDDDDDD....","....DDDD.DDD....","....DDDD.DDD....","....DDDD.DDD....","....DDDD.DDD....","....FFFF.FFF....","....FFFF.FFF...."];
+const GIGI_PAL={H:"#c8843a",S:"#fcd5b0",E:"#5b7bb5",M:"#d9756a",P:"#9b6bbf",D:"#2d2d5e",F:"#5c3d1e",".":null};
+const GARRETT_PIX=[".....BBBBBB.....","....BBBBBBBB....","....BBSSSSBB....","...BBBSSSSSBB...","...BBSSESSEBB...","...BBSSSSSSBBB..","...BBSSSMSSBBB..","....BBBSSSBBB...",".....BBBBBB.....","......SSSS......","......SSSS......",".....LLLLLL.....","....LLLLLLLL....","....LLLLLLLL....","....LLLLLLLL....","....LLLLLLLL.....",".....LLLLLL.....",".....GGG.GGG.....",".....GGG.GGG.....",".....GGG.GGG.....",".....GGG.GGG.....",".....TTT.TTT.....",".....TTT.TTT....."];
+const GARRETT_PAL={B:"#f0e0b0",S:"#fdd9c0",E:"#5b88c4",M:"#e88878",L:"#3a75b5",G:"#3d5a8a",T:"#4a3520",".":null};
+const CHEWY_PIX=["..GGGG..",".GGGGGG.","GGDDDGGG","GDDDDDGG","GDOODDGG","GDDDDGGG",".GGGGGG.","LLGGGLL.",".LLLLLL.",".LL..LL."];
+const CHEWY_PAL={G:"#9a9a9a",D:"#606060",O:"#7a9a60",L:"#808080",".":null};
+const MARSH_PIX=["..WWWW..",".WWWWWW.","WWGSSGWW","WGSSSSGW","WGSOOGWW","WWGSSGWW",".WWWWWW.","CCWWWCCC",".CCCCCC.",".CC..CC."];
+const MARSH_PAL={W:"#f0ece0",G:"#a0a0a8",S:"#e0dcd0",O:"#5b7bb5",C:"#d0ccc0",".":null};
+const ANAKIN_PIX=["..DDDD..",".DDDDDD.","DDNOONDO","DNNOONND","DNOOONND","DDOOONDD",".DDDDDD.","TTDDDTTT",".TTTTTT.",".TT..TT."];
+const ANAKIN_PAL={D:"#2a1a0a",N:"#5c3510",O:"#c96820",T:"#3d2010",".":null};
+
+function drawLandscape(){
+  const canvas=document.getElementById("landscape");
+  const W=canvas.parentElement.clientWidth||460;
+  const B=8,H=140;
+  canvas.width=W;canvas.height=H;canvas.style.height=H+"px";
+  const ctx=canvas.getContext("2d");ctx.imageSmoothingEnabled=false;
+  const cols=Math.ceil(W/B),rows=Math.ceil(H/B);
+  const sky=["#1a2a5e","#1e3366","#22396e","#264076","#2a477e"];
+  for(let r=0;r<rows;r++){ctx.fillStyle=sky[Math.min(Math.floor(r/rows*sky.length),sky.length-1)];ctx.fillRect(0,r*B,W,B);}
+  for(let i=0;i<20;i++){ctx.fillStyle="rgba(255,255,255,0.7)";ctx.fillRect(((i*73+11)%cols)*B+3,((i*37+5)%(Math.floor(rows/2)))*B+3,2,2);}
+  ctx.fillStyle="#ffeebb";for(let dx=0;dx<3;dx++)for(let dy=0;dy<3;dy++)ctx.fillRect((cols-6+dx)*B,(1+dy)*B,B,B);
+  ctx.fillStyle="#22396e";ctx.fillRect((cols-5)*B,B,B,B);
+  const mtn=[14,12,10,9,8,10,13,11,9,8,10,12,14,12,10,9,11,13,10,9];
+  for(let c=0;c<cols;c++){const mh=mtn[c%mtn.length];for(let r=mh;r<rows-4;r++){ctx.fillStyle=r===mh?"#4a5060":"#363c48";ctx.fillRect(c*B,r*B,B,B);}}
+  for(let c=0;c<cols;c++){ctx.fillStyle="#555";ctx.fillRect(c*B,(rows-5)*B,B,B);ctx.fillStyle="#666";ctx.fillRect(c*B,(rows-4)*B,B,B);}
+  for(let c=0;c<cols;c++){ctx.fillStyle="#7a5230";ctx.fillRect(c*B,(rows-3)*B,B,B);ctx.fillStyle="#8b5e38";ctx.fillRect(c*B,(rows-2)*B,B,B);}
+  for(let c=0;c<cols;c++){ctx.fillStyle=c%2===0?"#4a9f3d":"#3d8c32";ctx.fillRect(c*B,(rows-4)*B,B,B);}
+  [2,7,11,16,20,cols-4,cols-9].forEach(tc=>{
+    if(tc<0||tc>=cols-2)return;const gr=rows-4;
+    ctx.fillStyle="#6b4423";ctx.fillRect(tc*B,(gr-2)*B,B,B*2);
+    for(let lx=-1;lx<=1;lx++)for(let ly=-3;ly<=-1;ly++){ctx.fillStyle=((lx+ly)%2===0)?"#2d7a20":"#3a9030";ctx.fillRect((tc+lx)*B,(gr+ly)*B,B,B);}
+    ctx.fillStyle="#3a9030";ctx.fillRect(tc*B,(gr-4)*B,B,B);
+  });
+  [[4,rows-5,"#ff5555"],[9,rows-5,"#ff88aa"],[14,rows-5,"#ffdd44"],[18,rows-5,"#ff5555"]].forEach(([c,r,col])=>{if(c<cols){ctx.fillStyle=col;ctx.fillRect(c*B+2,r*B+2,B-4,B-4);}});
+  ctx.strokeStyle="rgba(0,0,0,0.07)";ctx.lineWidth=.5;
+  for(let c=0;c<=cols;c++){ctx.beginPath();ctx.moveTo(c*B,0);ctx.lineTo(c*B,H);ctx.stroke();}
+  for(let r=0;r<=rows;r++){ctx.beginPath();ctx.moveTo(0,r*B);ctx.lineTo(W,r*B);ctx.stroke();}
+  const scene=document.getElementById("scene");
+  scene.style.height=H+"px";scene.style.marginTop="-"+H+"px";scene.style.position="relative";
+}
+
+const PCOLS=["#ffd040","#7ec850","#ff6b6b","#6bbbff","#ff6bff","#40ffc0","#ffaa40","#fff","#ff4444","#44ff88"];
+function spawnParticles(){
+  const btn=document.getElementById("main-btn");const r=btn.getBoundingClientRect();
+  const cx=r.left+r.width/2,cy=r.top+r.height/2;
+  for(let i=0;i<24;i++){
+    const p=document.createElement("div");p.className="particle";
+    p.style.background=PCOLS[Math.floor(Math.random()*PCOLS.length)];
+    p.style.left=cx+"px";p.style.top=cy+"px";document.body.appendChild(p);
+    const vx=(Math.random()-.5)*200,vy=-(Math.random()*140+70);const start=Date.now();
+    const tick=()=>{const t=(Date.now()-start)/1000;if(t>1){p.remove();return;}
+      p.style.left=(cx+vx*t)+"px";p.style.top=(cy+vy*t+110*t*t)+"px";p.style.opacity=1-t;requestAnimationFrame(tick);};
+    requestAnimationFrame(tick);
+  }
+}
+function triggerAnim(){
+  spawnParticles();
+  ["gigi","garrett"].forEach(id=>{const el=document.getElementById(id);el.classList.remove("jumping","glowing");void el.offsetWidth;el.classList.add("jumping","glowing");setTimeout(()=>el.classList.remove("jumping","glowing"),600);});
+  ["chewy","marsh","anakin"].forEach((id,i)=>{const el=document.getElementById(id);setTimeout(()=>{el.classList.remove("catjump");void el.offsetWidth;el.classList.add("catjump");setTimeout(()=>el.classList.remove("catjump"),600);},i*80);});
+  const lid=document.getElementById("chest-lid"),glow=document.getElementById("chest-glow");
+  lid.style.transform="perspective(80px) rotateX(-55deg)";lid.style.top="-4px";glow.style.display="block";
+  setTimeout(()=>{lid.style.transform="";lid.style.top="18px";glow.style.display="none";},700);
+}
+
+let missions=[],revealed=0;
+const THEMES=[
+  {bg:"#0a1f0a",b:"#4a9f3d",a:"#7ec850",ic:"&#127807;"},
+  {bg:"#0a0a1f",b:"#5555ff",a:"#9999ff",ic:"&#128142;"},
+  {bg:"#1f0a0a",b:"#ff5555",a:"#ff9999",ic:"&#128293;"},
+  {bg:"#1f1a0a",b:"#d4a017",a:"#ffd040",ic:"&#11088;"},
+  {bg:"#0a141f",b:"#4aaacc",a:"#88ddff",ic:"&#127754;"},
+  {bg:"#150a1f",b:"#aa44cc",a:"#dd88ff",ic:"&#128302;"},
+  {bg:"#1f120a",b:"#cc8822",a:"#ffbb44",ic:"&#127812;"},
+  {bg:"#0a1f14",b:"#22cc88",a:"#55ffcc",ic:"&#128034;"},
+  {bg:"#141414",b:"#aaaaaa",a:"#ffffff",ic:"&#9889;"},
+  {bg:"#1f140a",b:"#8b4513",a:"#d4834a",ic:"&#129683;"},
+];
+function renderMissions(){
+  const container=document.getElementById("missions");container.innerHTML="";
+  missions.forEach((m,i)=>{
+    const t=THEMES[i%THEMES.length];const div=document.createElement("div");
+    div.className="card"+(i<revealed?" revealed":"");
+    if(i<revealed){
+      div.style.background=t.bg;div.style.borderColor=t.b;
+      div.style.boxShadow="3px 3px 0 #000";
+      const lines=m.split("\n").filter(Boolean);
+      let html=`<div class="card-title" style="color:${t.a}">${t.ic} ${lines[0]||""}</div>`;
+      html+=`<div class="card-class" style="color:${t.b}">${lines[1]||""}</div>`;
+      lines.slice(2).forEach(s=>{const clean=s.toLowerCase().includes("clean-up");html+=`<div class="step${clean?" cleanup":""}">${s}</div>`;});
+      div.innerHTML=html;
+    } else {
+      div.innerHTML=`<div class="card-locked"><span>&#128274;</span><span>MISSION ${i+1} &mdash; LOCKED</span></div>`;
+    }
+    container.appendChild(div);
+  });
+  if(revealed>0){const cards=container.querySelectorAll(".card");if(cards[revealed-1])cards[revealed-1].scrollIntoView({behavior:"smooth",block:"nearest"});}
+}
+function updateChest(){
+  const area=document.getElementById("chest-area"),bar=document.getElementById("chest-bar"),counter=document.getElementById("chest-counter");
+  if(missions.length>0){
+    area.style.display="flex";bar.style.width=(revealed/missions.length*100)+"%";
+    const done=revealed>=missions.length;
+    counter.textContent=done?"ALL UNLOCKED!":revealed+" / "+missions.length+" OPENED";
+    counter.style.color=done?"#ffd040":"#7ec850";
+  } else {area.style.display="none";}
+}
+function updateBtn(){
+  const btn=document.getElementById("main-btn");
+  if(missions.length===0){btn.innerHTML="&#128272; GET LOOT BOX";btn.className="btn btn-gold";}
+  else if(revealed>=missions.length){btn.innerHTML="&#128260; NEW LOOT BOX";btn.className="btn btn-grey";document.getElementById("briefing-end").style.display="block";}
+  else{btn.innerHTML="&#128230; OPEN MISSION "+(revealed+1);btn.className="btn btn-green";document.getElementById("briefing-end").style.display="none";}
+}
+async function fetchMissions(){
+  const btn=document.getElementById("main-btn");
+  btn.innerHTML="&#9203; LOADING...";btn.className="btn btn-grey";btn.disabled=true;
+  document.getElementById("error-box").style.display="none";
+  document.getElementById("briefing-end").style.display="none";
+  missions=[];revealed=0;renderMissions();updateChest();
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",max_tokens:1500,
+      system:"You are the CEO. Generate EXACTLY 10 missions for Gigi (age 8, loves Minecraft/climbing/crafts) and Garrett (age 5, loves trucks/Bluey/Rubble).\nRules: no kitchen appliances, zones: playroom/living room/backyard, no adult supervision needed, every mission ends with Clean-Up Phase.\nGear: Legos, cardboard boxes, art supplies, science kits, slackline (backyard), swing (backyard), Nintendo Switch, cats Anakin/Chewy/Marshmallow (gentle only).\nReturn ONLY a JSON array of 10 strings. Each string uses literal \\n for newlines:\n\"Operation: [NAME]\\n[Classification: Epic Quest (45-60 mins) OR Quick-Hit (15-20 mins)]\\n[step 1 max 12 words]\\n[step 2 max 12 words]\\n[step 3 max 12 words]\\nClean-Up Phase: [specific items and exact destinations]\"\nOutput ONLY the JSON array. No other text.",
+      messages:[{role:"user",content:"Fresh loot box!"}],
+    })});
+    const data=await res.json();
+    const txt=data.content?.find(b=>b.type==="text")?.text||"[]";
+    missions=JSON.parse(txt.replace(/```json|```/g,"").trim());
+  }catch(e){const eb=document.getElementById("error-box");eb.textContent="Mission briefing failed. Tap retry!";eb.style.display="block";}
+  btn.disabled=false;renderMissions();updateChest();updateBtn();
+}
+function openNext(){if(revealed>=missions.length)return;triggerAnim();setTimeout(()=>{revealed++;renderMissions();updateChest();updateBtn();},340);}
+function handleBtn(){
+  if(missions.length===0){fetchMissions();}
+  else if(revealed>=missions.length){missions=[];revealed=0;fetchMissions();}
+  else{openNext();}
+}
+window.addEventListener("load",()=>{
+  drawLandscape();
+  drawPixels(document.getElementById("gigi"),GIGI_PIX,GIGI_PAL,5);
+  drawPixels(document.getElementById("garrett"),GARRETT_PIX,GARRETT_PAL,5);
+  drawPixels(document.getElementById("chewy"),CHEWY_PIX,CHEWY_PAL,4);
+  drawPixels(document.getElementById("marsh"),MARSH_PIX,MARSH_PAL,4);
+  drawPixels(document.getElementById("anakin"),ANAKIN_PIX,ANAKIN_PAL,4);
+  window.addEventListener("resize",drawLandscape);
+});
+if("serviceWorker" in navigator){
+  const sw=`self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>clients.claim());self.addEventListener("fetch",e=>{if(e.request.url.includes("api.anthropic.com")||e.request.url.includes("fonts.googleapis"))return;e.respondWith(caches.open("v1").then(c=>c.match(e.request).then(r=>r||(fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;})))))});`;
+  const blob=new Blob([sw],{type:"application/javascript"});
+  navigator.serviceWorker.register(URL.createObjectURL(blob),{scope:"./"}).catch(()=>{});
+}
+const manifest={name:"CEO Loot Box",short_name:"Loot Box",description:"Top Secret Mission HQ for Gigi & Garrett",start_url:"./",display:"standalone",background_color:"#07090f",theme_color:"#0a140a",orientation:"portrait",icons:[{src:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAC7ElEQVR4nO3TsU0DARBFQceOiWjCKQFIjl0EsXuhCCjJHR0dIB0S7N29CV6++to53T7fFqnaafoAaTIAlA4ApQNA6QBQOgCUDgClA0DpAFA6AJQOAKVbDeD8dNYPLY/rqqbvPVoADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsAAwHwGwADAfAbAAMB8BsuwfggWbb+/4AKL0/AErvD4DS+wOg9P4AKL0/AErvD4DS+wOg9P4AKL0/AErvD4DS+28OwO3yLP06AJQOAKUDQOkAUDoAlA4ApQNA6QBQOgCUDgClA0DpcgC+7i86cAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEAQDoAAEgHAADpAAAgHQAApAMAgHQAAJAOAADSAQBAOgAASAcAAOkAACAdAACkA0BaEQBKB4DSAaB0ACgdAEoHgNIBoHQAKB0ASgeA0gGgdDkAH++vOnAAAJAOAADSAQBAOgAASAcAAOkAACAdAACkAwCAdAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEAQDoAAEgHAADpAAAgHQAApANgZwCWx3XXTe8HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABsqukHBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbSwAAEgHAADpAAAgHQAApAMAgHQAAJAOAADSAQBAOgAASAcAAOkAACAdAACkAwCAdAAAkA4AANIBAEA6AABIBwAA6QAAIB0AAKQDAIB0AACQDgAA0gEgrQgApQNA6QBQOgCUDgClA0DpAFA6AJQOAKUDQOkAULrdA5D+MwCUDgClA0DpAFA6AJQOAKUDQOkAUDoAlA4ApQNA6f4cgHSkAFA6AJQOAKUDQOkAUDoAlA4ApQNA6QBQOgCUDgCl+wY7ybFJX7kStQAAAABJRU5ErkJggg==",sizes:"192x192",type:"image/png",purpose:"any maskable"},{src:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAASmklEQVR4nO3WsVEbUBREUWJiRzThlMCeIaYIYvdCEVASHcldvBvsCU4ujfTf3qf3r78PAGDLU/0BAIB7AgAABgkAABgkAABgkAAAgEECAAAGCQAAGCQAAGCQAACAQQIAAAYJAAAYJAAAYJAAAIBBAgAABgkAABgkAABgkAAAgEECAAAGCQAAGCQAAGCQAACAQQIAAAYJAAAYJAAAYJAAAIBBAgAABgkAABgkAABgkAAAgEECAAAGCQAAGJQHwPOvZ5j1+HlL1d8fltX7KwAgJABgV72/AgBCAgB21fsrACAkAGBXvb8CAEICAHbV+ysAICQAYFe9vwIAQgIAdtX7KwAgJABgV72/AgBCAgB21fsrACAkAGBXvb8CAEICAHbV+ysAICQAYFe9vwIAQgIAdtX7KwAgJABgV72/AgBCAgB21fsrACAkAGBXvb8CAEICAHbV+ysAICQAYFe9vwIAQgIAdtX7KwAgJABgV72/AgBCAgB21fsrACAkAGBXvb8CAEICAHbV+ysAICQAYFe9vwIAQgIAdtX7KwAgJABgV72/AgBCAgB21fsrACAkAGBXvb8CAEICAHbV+ysAICQAYFe9vwIAQgIAdtX7KwAgJABgV72/AiBmAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63eXwEQcwBgl/e/rd5fARBzAGCX97+t3l8BEHMAYJf3v63e3/kAeP/9AsCgfH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CIDtAPj+9wowqb6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IAAEAsKi+v/n+CAABALCovr/5/ggAAQCwqL6/+f4IgO0AAKCR748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fAbAdAJ8ffwAm1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIAAAFtX3N98fASAAABbV9zffHwEgAAAW1fc33x8BIADoPH7eGFb//9bV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACAA69QAhAJbV9zffHwEgAOjUA4QAWFbf33x/BIAAoFMPEAJgWX1/8/0RAAKATj1ACIBl9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAAgAgEX1/c33RwAIAIBF9f3N90cACACARfX9zfdHAGwHAACNfH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CAABAMC9fH8EgAAA4F6+PwJAAABwL98fASAAALiX748AEAAA3Mv3RwAIAADu5fsjAAQAAPfy/REAAgCAe/n+CID2BwCAQr2/AgAAAvX+CgAACNT7KwAAIFDvrwAAgEC9vwIAAAL1/goAAAjU+ysAACBQ768AAIBAvb8CAAAC9f4KAAAI1PsrAAAgUO+vAACAQL2/AgAAAvX+CgAACNT7KwAAIFDvrwAAgEC9vwIAAAL1/goAAAjU+ysAACBQ768AAIBAvb8CAAAC9f4KAAAI1PsrAAAgUO+vAACAQL2/AgAAAvX+CgAACNT7KwAAIFDvrwAAgEC9vwIAAAL1/goAAAjU+ysAACBQ728eAADAPQEAAIMEAAAMEgAAMEgAAMAgAQAAgwQAAAwSAAAwSAAAwCABAACDBAAADBIAADBIAADAIAEAAIMEAAAMEgAAMEgAAMAgAQAAgwQAAAwSAAAwSAAAwCABAACDBAAADBIAADBIAADAIAEAAIMEAAAMEgAAMEgAAMAgAQAAgwQAAAwSAAAw6D8lqkJHYGcNZQAAAABJRU5ErkJggg==",sizes:"512x512",type:"image/png",purpose:"any maskable"}]};
+const mb=new Blob([JSON.stringify(manifest)],{type:"application/json"});
+const ml=document.createElement("link");ml.rel="manifest";ml.href=URL.createObjectURL(mb);document.head.appendChild(ml);
+</script>
+</body>
+</html>
