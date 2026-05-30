@@ -239,7 +239,7 @@ async function fetchMissions(){
   document.getElementById("briefing-end").style.display="none";
   missions=[];revealed=0;renderMissions();updateChest();
   try{
-    const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+    const res=await fetch("https://quiet-wood-bf2f.carlagsaavedra.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       model:"claude-sonnet-4-20250514",max_tokens:1500,
       system:"You are the CEO. Generate EXACTLY 10 missions for Gigi (age 8, loves Minecraft/climbing/crafts) and Garrett (age 5, loves trucks/Bluey/Rubble).\nRules: no kitchen appliances, zones: playroom/living room/backyard, no adult supervision needed, every mission ends with Clean-Up Phase.\nGear: Legos, cardboard boxes, art supplies, science kits, slackline (backyard), swing (backyard), Nintendo Switch, cats Anakin/Chewy/Marshmallow (gentle only).\nReturn ONLY a JSON array of 10 strings. Each string uses literal \\n for newlines:\n\"Operation: [NAME]\\n[Classification: Epic Quest (45-60 mins) OR Quick-Hit (15-20 mins)]\\n[step 1 max 12 words]\\n[step 2 max 12 words]\\n[step 3 max 12 words]\\nClean-Up Phase: [specific items and exact destinations]\"\nOutput ONLY the JSON array. No other text.",
       messages:[{role:"user",content:"Fresh loot box!"}],
