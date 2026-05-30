@@ -45,9 +45,68 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges}
 #chest-area{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:10px}
 #briefing-end{text-align:center;font-size:8px;color:#ffd040;padding:16px;border:3px solid #ffd040;background:#1a1200;box-shadow:4px 4px 0 #000;animation:shimmer 1.5s infinite;line-height:2.5;margin-top:8px;display:none}
 #error-box{font-size:7px;color:#ff5555;text-align:center;padding:12px;border:2px solid #ff5555;background:#1a0000;margin-bottom:12px;line-height:2;display:none}
+
+#splash{position:fixed;inset:0;z-index:9999;background:#07090f;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;transition:opacity 0.6s ease;overflow:hidden;}
+#splash.hidden{opacity:0;pointer-events:none;}
+#splash-scene{width:100%;max-width:480px;background:#07090f;position:relative;}
+#splash-canvas{display:block;width:100%;image-rendering:pixelated;}
+#splash-chars{display:flex;justify-content:space-around;align-items:flex-end;padding:0 8px 4px;background:#07090f;}
+#splash-panel{background:#0a140a;border:3px solid #4a9f3d;width:100%;max-width:480px;padding:14px 16px 16px;box-shadow:0 -4px 0 #2d6b25;display:flex;flex-direction:column;align-items:center;gap:8px;}
+#splash-title{font-family:'Press Start 2P',monospace;font-size:11px;color:#ffd040;text-align:center;line-height:2;text-shadow:2px 2px 0 #000;animation:titleFloat 2s ease infinite;}
+#splash-greeting{font-family:'Press Start 2P',monospace;font-size:8px;color:#7ec850;text-align:center;line-height:2;text-shadow:1px 1px 0 #000;}
+#splash-divider{width:80%;height:2px;background:linear-gradient(to right,transparent,#4a9f3d,transparent);}
+#splash-joke-label{font-family:'Press Start 2P',monospace;font-size:6px;color:#555;text-align:center;}
+#splash-joke{font-family:'VT323',monospace;font-size:20px;color:#ffd040;text-align:center;line-height:1.5;max-width:360px;min-height:52px;padding:0 8px;}
+#splash-btn{font-family:'Press Start 2P',monospace;font-size:12px;color:#fff;background:#4a9f3d;border:none;padding:18px 24px;width:100%;max-width:400px;cursor:pointer;text-shadow:2px 2px 0 #000;box-shadow:6px 6px 0 #2d6b25,inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.25);margin-top:4px;touch-action:manipulation;letter-spacing:1px;}
+#splash-btn:active{transform:translateY(6px);box-shadow:inset -4px -4px 0 #000,inset 4px 4px 0 rgba(255,255,255,.2);}
+.splash-char{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.splash-char-label{font-family:'Press Start 2P',monospace;font-size:5px;color:#ffd040;text-shadow:1px 1px 0 #000;}
+.splash-cat-label{font-family:'Press Start 2P',monospace;font-size:5px;color:#aaa;text-shadow:1px 1px 0 #000;}
+@keyframes splashBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}70%{transform:translateY(-4px)}}
+@keyframes splashWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+@keyframes splashSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes splashDance{0%,100%{transform:translateY(0) scaleX(1)}25%{transform:translateY(-8px) scaleX(-1)}75%{transform:translateY(-4px) scaleX(1)}}
+.anim-bounce{animation:splashBounce 0.8s ease !important;}
+.anim-wiggle{animation:splashWiggle 0.6s ease !important;}
+.anim-spin{animation:splashSpin 0.6s linear !important;}
+.anim-dance{animation:splashDance 0.8s ease !important;}
+
+#hud{display:flex;justify-content:space-between;align-items:center;padding:10px 16px 0;gap:8px;}
+#streak-box{display:flex;flex-direction:column;align-items:center;background:#1a0a00;border:3px solid #ff6820;padding:6px 10px;box-shadow:3px 3px 0 #000;min-width:90px;}
+#streak-icon{font-size:18px;line-height:1;}
+#streak-count{font-family:'Press Start 2P',monospace;font-size:9px;color:#ff6820;text-shadow:1px 1px 0 #000;line-height:1.8;}
+#streak-label{font-family:'Press Start 2P',monospace;font-size:5px;color:#ff9050;line-height:1.5;}
+#level-box{display:flex;flex-direction:column;align-items:center;background:#0a001a;border:3px solid #9b6bbf;padding:6px 10px;box-shadow:3px 3px 0 #000;min-width:90px;}
+#level-icon{font-size:18px;line-height:1;}
+#level-name{font-family:'Press Start 2P',monospace;font-size:7px;color:#d088ff;text-shadow:1px 1px 0 #000;line-height:1.8;text-align:center;}
+#level-xp{font-family:'Press Start 2P',monospace;font-size:5px;color:#9b6bbf;line-height:1.5;}
+#xp-bar-wrap{width:100%;height:6px;background:#1a0030;border:1px solid #5a3a8a;margin-top:3px;}
+#xp-bar{height:100%;background:#9b6bbf;transition:width 0.4s ease;}
+@keyframes levelUp{0%{transform:scale(1)}30%{transform:scale(1.3)}60%{transform:scale(0.95)}100%{transform:scale(1)}}
+.level-up-anim{animation:levelUp 0.5s ease !important;}
 </style>
 </head>
 <body>
+<div id="splash">
+  <div id="splash-scene">
+    <canvas id="splash-canvas"></canvas>
+    <div id="splash-chars">
+      <div class="splash-char"><div class="splash-char-label">GIGI</div><canvas id="sp-gigi"></canvas></div>
+      <div class="splash-char"><div class="splash-cat-label">CHEWY</div><canvas id="sp-chewy"></canvas></div>
+      <div class="splash-char"><div class="splash-cat-label">MARSH</div><canvas id="sp-marsh"></canvas></div>
+      <div class="splash-char"><div class="splash-cat-label">ANAKIN</div><canvas id="sp-anakin"></canvas></div>
+      <div class="splash-char"><div class="splash-char-label">GARRETT</div><canvas id="sp-garrett" style="transform:scaleX(-1)"></canvas></div>
+    </div>
+  </div>
+  <div id="splash-panel">
+    <div id="splash-title">&#127919; CEO LOOT BOX &#127919;</div>
+    <div id="splash-greeting">Loading...</div>
+    <div id="splash-divider"></div>
+    <div id="splash-joke-label">&#128514; JOKE OF THE DAY</div>
+    <div id="splash-joke"></div>
+    <button id="splash-btn" onclick="soundBtn();dismissSplash()">&#128640; START MISSIONS!</button>
+  </div>
+</div>
 <div id="wrap">
   <canvas id="landscape" style="display:block;width:100%"></canvas>
   <div id="scene" style="position:relative">
@@ -98,9 +157,10 @@ canvas{image-rendering:pixelated;image-rendering:crisp-edges}
       <div id="chest-counter" style="font-size:7px;color:#7ec850"></div>
     </div>
   </div>
-  <div id="content">
+  <div id="hud"><div id="streak-box"><div id="streak-icon">📅</div><div id="streak-count">0 DAYS</div><div id="streak-label">STREAK</div></div><div id="level-box"><div id="level-icon">🥚</div><div id="level-name">ROOKIE<br>AGENT</div><div id="level-xp">0 / 5 XP</div><div id="xp-bar-wrap"><div id="xp-bar" style="width:0%"></div></div></div></div>
+<div id="content">
     <div style="margin-bottom:14px">
-      <button id="main-btn" class="btn btn-gold" onclick="handleBtn()">&#128272; GET LOOT BOX</button>
+      <button id="main-btn" class="btn btn-gold" onclick="soundBtn();handleBtn()">&#128272; GET LOOT BOX</button>
     </div>
     <div id="error-box"></div>
     <div id="missions"></div>
@@ -175,10 +235,32 @@ function spawnParticles(){
     requestAnimationFrame(tick);
   }
 }
+const CHAR_ANIMS_HUMAN=[
+  e=>{ e.classList.remove("jumping","glowing"); void e.offsetWidth; e.classList.add("jumping","glowing"); setTimeout(()=>e.classList.remove("jumping","glowing"),600); },
+  e=>{ e.style.transition="transform 0.15s"; e.style.transform="scaleX(-1) rotate(20deg)"; setTimeout(()=>{e.style.transform="scaleX(-1)"; setTimeout(()=>{e.style.transform="";e.style.transition="";},200);},300); },
+  e=>{ e.classList.remove("jumping","glowing"); void e.offsetWidth; e.classList.add("jumping","glowing"); e.style.filter="drop-shadow(0 0 10px #ff6bff)"; setTimeout(()=>{e.classList.remove("jumping","glowing");e.style.filter="";},650); },
+  e=>{ e.style.animation="splashSpin 0.5s linear"; setTimeout(()=>e.style.animation="",550); },
+  e=>{ e.style.animation="splashDance 0.7s ease"; setTimeout(()=>e.style.animation="",750); },
+];
+const CAT_ANIMS=[
+  e=>{ e.classList.remove("catjump"); void e.offsetWidth; e.classList.add("catjump"); setTimeout(()=>e.classList.remove("catjump"),600); },
+  e=>{ e.style.animation="splashWiggle 0.5s ease"; setTimeout(()=>e.style.animation="",550); },
+  e=>{ e.style.transform="scaleX(-1) scaleY(1.2)"; setTimeout(()=>e.style.transform="",400); },
+  e=>{ e.style.animation="splashBounce 0.6s ease"; setTimeout(()=>e.style.animation="",650); },
+  e=>{ e.style.transform="rotate(15deg)"; setTimeout(()=>e.style.transform="",350); },
+];
 function triggerAnim(){
+  soundOpen();
   spawnParticles();
-  ["gigi","garrett"].forEach(id=>{const el=document.getElementById(id);el.classList.remove("jumping","glowing");void el.offsetWidth;el.classList.add("jumping","glowing");setTimeout(()=>el.classList.remove("jumping","glowing"),600);});
-  ["chewy","marsh","anakin"].forEach((id,i)=>{const el=document.getElementById(id);setTimeout(()=>{el.classList.remove("catjump");void el.offsetWidth;el.classList.add("catjump");setTimeout(()=>el.classList.remove("catjump"),600);},i*80);});
+  ["gigi","garrett"].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    const fn=CHAR_ANIMS_HUMAN[Math.floor(Math.random()*CHAR_ANIMS_HUMAN.length)];
+    setTimeout(()=>{soundJump();fn(el);}, i*100);
+  });
+  ["chewy","marsh","anakin"].forEach((id,i)=>{const el=document.getElementById(id);setTimeout(()=>{
+    const fn=CAT_ANIMS[Math.floor(Math.random()*CAT_ANIMS.length)];
+    soundCat();fn(el);
+  },i*80);});
   const lid=document.getElementById("chest-lid"),glow=document.getElementById("chest-glow");
   lid.style.transform="perspective(80px) rotateX(-55deg)";lid.style.top="-4px";glow.style.display="block";
   setTimeout(()=>{lid.style.transform="";lid.style.top="18px";glow.style.display="none";},700);
@@ -239,8 +321,8 @@ async function fetchMissions(){
   document.getElementById("briefing-end").style.display="none";
   missions=[];revealed=0;renderMissions();updateChest();
   try{
-    const res=await fetch("https://quiet-wood-bf2f.carlagsaavedra.workers.dev",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      model:"claude-haiku-4-5-20251001",max_tokens:1500,
+    const res=await fetch("https://https://quiet-wood-bf2f.carlagsaavedra.workers.dev/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",max_tokens:1500,
       system:"You are the CEO. Generate EXACTLY 10 missions for Gigi (age 8, loves Minecraft/climbing/crafts) and Garrett (age 5, loves trucks/Bluey/Rubble).\nRules: no kitchen appliances, zones: playroom/living room/backyard, no adult supervision needed, every mission ends with Clean-Up Phase.\nGear: Legos, cardboard boxes, art supplies, science kits, slackline (backyard), swing (backyard), Nintendo Switch, cats Anakin/Chewy/Marshmallow (gentle only).\nReturn ONLY a JSON array of 10 strings. Each string uses literal \\n for newlines:\n\"Operation: [NAME]\\n[Classification: Epic Quest (45-60 mins) OR Quick-Hit (15-20 mins)]\\n[step 1 max 12 words]\\n[step 2 max 12 words]\\n[step 3 max 12 words]\\nClean-Up Phase: [specific items and exact destinations]\"\nOutput ONLY the JSON array. No other text.",
       messages:[{role:"user",content:"Fresh loot box!"}],
     })});
@@ -250,13 +332,282 @@ async function fetchMissions(){
   }catch(e){const eb=document.getElementById("error-box");eb.textContent="Mission briefing failed. Tap retry!";eb.style.display="block";}
   btn.disabled=false;renderMissions();updateChest();updateBtn();
 }
-function openNext(){if(revealed>=missions.length)return;triggerAnim();setTimeout(()=>{revealed++;renderMissions();updateChest();updateBtn();},340);}
+function openNext(){if(revealed>=missions.length)return;triggerAnim();setTimeout(()=>{revealed++;soundReveal();awardXP(1);renderMissions();updateChest();updateBtn();},340);}
 function handleBtn(){
   if(missions.length===0){fetchMissions();}
   else if(revealed>=missions.length){missions=[];revealed=0;fetchMissions();}
   else{openNext();}
 }
+const JOKES=[
+  "Why did Chewy sit on the computer? To keep an eye on the mouse! 🐱",
+  "What do you call a cat that gets everything it wants? Purrr-suasive! 😸",
+  "Why did Garrett bring a ladder to school? Because he heard the lessons were on a higher level! 🪜",
+  "What do you call cheese that isn't yours? Nacho cheese! 🧀",
+  "Why did Gigi bring a pencil to bed? To draw the curtains! ✏️",
+  "What do you call a sleeping dinosaur? A dino-snore! 🦕",
+  "Why did Marshmallow cross the road? To get to the other scratch post! 🐈",
+  "What do elves learn in school? The elf-abet! 🧝",
+  "Why can't Garrett play cards in the jungle? Too many cheetahs! 🐆",
+  "What do you call a fish without eyes? A fsh! 🐟",
+  "Why did Anakin knock over the water bowl? Because he could! 😼",
+  "What did the ocean say to the beach? Nothing, it just waved! 🌊",
+  "Why did Gigi eat her homework? Because her teacher told her it was a piece of cake! 🎂",
+  "What do you call a bear with no teeth? A gummy bear! 🐻",
+  "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾",
+  "What do you call a fake noodle? An impasta! 🍝",
+  "Why did Chewy sleep 16 hours? Research purposes! 😴",
+  "What do you call a pig that does karate? A pork chop! 🥋",
+  "Why did Garrett bring a map to the playroom? So he wouldn't get lost in Bluey land! 🗺️",
+  "What do you call a snowman with a six-pack? An abdominal snowman! ⛄",
+];
+function getGreeting(){
+  const h=new Date().getHours();
+  if(h<6) return "🌙 Secret Agent\nMiddle of the Night\nMission Mode!";
+  if(h<10) return "🌅 Good Morning\nAgents Gigi\n& Garrett!";
+  if(h<12) return "☀️ Morning Agents!\nReady for your\nmissions today?";
+  if(h<14) return "🌞 Good Afternoon\nAgents! Time for\nsome missions!";
+  if(h<17) return "🎮 Afternoon\nAgents Gigi\n& Garrett!";
+  if(h<20) return "🌆 Evening\nAgents! One last\nmission before dinner?";
+  return "🌙 Bedtime\nAgents! One\nquick mission?";
+}
+function getDailyJoke(){
+  const day=new Date().toDateString();
+  let hash=0;for(let c of day)hash=(hash*31+c.charCodeAt(0))%JOKES.length;
+  return JOKES[hash];
+}
+// Splash animation names
+const SPLASH_ANIMS=['anim-bounce','anim-wiggle','anim-dance','anim-spin'];
+function randomSplashAnim(el){
+  el.className=el.className.replace(/anim-\S+/g,'').trim();
+  const a=SPLASH_ANIMS[Math.floor(Math.random()*SPLASH_ANIMS.length)];
+  void el.offsetWidth;
+  el.className+=' '+a;
+  setTimeout(()=>el.className=el.className.replace(/anim-\S+/g,'').trim(),900);
+}
+function triggerSplashAnims(){
+  // Random chars do random things each time
+  ['sp-gigi','sp-garrett','sp-chewy','sp-marsh','sp-anakin'].forEach((id,i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(el) randomSplashAnim(el);
+    }, i*120);
+  });
+}
+function drawSplashLandscape(){
+  const canvas=document.getElementById('splash-canvas');
+  if(!canvas) return;
+  const W=canvas.parentElement.clientWidth||480;
+  const B=8,H=100;
+  canvas.width=W; canvas.height=H; canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d'); ctx.imageSmoothingEnabled=false;
+  const cols=Math.ceil(W/B),rows=Math.ceil(H/B);
+  // Night sky
+  const sky=['#0d1a3a','#111f44','#15254e','#192a58'];
+  for(let r=0;r<rows;r++){ctx.fillStyle=sky[Math.min(Math.floor(r/rows*sky.length),sky.length-1)];ctx.fillRect(0,r*B,W,B);}
+  // Stars
+  for(let i=0;i<25;i++){ctx.fillStyle='rgba(255,255,255,0.8)';ctx.fillRect(((i*73+11)%cols)*B+3,((i*37+5)%(Math.floor(rows*0.6)))*B+3,2,2);}
+  // Moon
+  ctx.fillStyle='#ffeebb';for(let dx=0;dx<3;dx++)for(let dy=0;dy<3;dy++)ctx.fillRect((cols-5+dx)*B,(1+dy)*B,B,B);
+  ctx.fillStyle='#111f44';ctx.fillRect((cols-4)*B,B,B,B);
+  // Mountains
+  const mtn=[8,7,6,5,4,5,7,6,5,4,5,7,8,7,6,5,6,8,6,5];
+  for(let c=0;c<cols;c++){const mh=mtn[c%mtn.length];for(let r=mh;r<rows-3;r++){ctx.fillStyle=r===mh?'#3a4050':'#2c3040';ctx.fillRect(c*B,r*B,B,B);}}
+  // Ground
+  for(let c=0;c<cols;c++){ctx.fillStyle=c%2===0?'#4a9f3d':'#3d8c32';ctx.fillRect(c*B,(rows-3)*B,B,B);}
+  for(let c=0;c<cols;c++){ctx.fillStyle='#7a5230';ctx.fillRect(c*B,(rows-2)*B,B,B*2);}
+  // Stars grid
+  ctx.strokeStyle='rgba(0,0,0,0.06)';ctx.lineWidth=.5;
+  for(let c=0;c<=cols;c++){ctx.beginPath();ctx.moveTo(c*B,0);ctx.lineTo(c*B,H);ctx.stroke();}
+  for(let r=0;r<=rows;r++){ctx.beginPath();ctx.moveTo(0,r*B);ctx.lineTo(W,r*B);ctx.stroke();}
+}
+function showSplash(){
+  drawSplashLandscape();
+  drawPixels(document.getElementById('sp-gigi'),GIGI_PIX,GIGI_PAL,4);
+  drawPixels(document.getElementById('sp-garrett'),GARRETT_PIX,GARRETT_PAL,4);
+  drawPixels(document.getElementById('sp-chewy'),CHEWY_PIX,CHEWY_PAL,3);
+  drawPixels(document.getElementById('sp-marsh'),MARSH_PIX,MARSH_PAL,3);
+  drawPixels(document.getElementById('sp-anakin'),ANAKIN_PIX,ANAKIN_PAL,3);
+  document.getElementById('splash-greeting').innerHTML=getGreeting().replace(/\n/g,'<br>');
+  document.getElementById('splash-joke').textContent=getDailyJoke();
+  // Characters do random animations every 2 seconds
+  triggerSplashAnims();
+  window._splashTimer=setInterval(triggerSplashAnims,2200);
+}
+function dismissSplash(){
+  clearInterval(window._splashTimer);
+  const s=document.getElementById('splash');
+  s.classList.add('hidden');
+  setTimeout(()=>s.remove(),700);
+}
+
+// ── STREAK & LEVEL SYSTEM ──────────────────────────────────────────────────
+const LEVELS=[
+  {name:"ROOKIE\nAGENT",xp:0,icon:"🥚"},
+  {name:"JUNIOR\nAGENT",xp:5,icon:"🌱"},
+  {name:"FIELD\nAGENT",xp:15,icon:"⚡"},
+  {name:"SPECIAL\nAGENT",xp:30,icon:"🔥"},
+  {name:"SENIOR\nAGENT",xp:50,icon:"💎"},
+  {name:"ELITE\nAGENT",xp:75,icon:"🚀"},
+  {name:"SUPER\nAGENT",xp:110,icon:"⭐"},
+  {name:"MASTER\nAGENT",xp:150,icon:"👑"},
+  {name:"LEGEND\nAGENT",xp:200,icon:"🏆"},
+  {name:"CEO\nLEGEND",xp:999,icon:"🎯"},
+];
+
+function getProgress(){
+  try{
+    const d=JSON.parse(localStorage.getItem('ceo-progress')||'{}');
+    if(!d.totalXP) d.totalXP=0;
+    if(!d.streak) d.streak=0;
+    if(!d.lastDate) d.lastDate='';
+    if(!d.completed) d.completed=0;
+    return d;
+  }catch(e){return{totalXP:0,streak:0,lastDate:'',completed:0};}
+}
+
+function saveProgress(p){
+  try{localStorage.setItem('ceo-progress',JSON.stringify(p));}catch(e){}
+}
+
+function getLevel(xp){
+  for(let i=LEVELS.length-1;i>=0;i--){if(xp>=LEVELS[i].xp)return i;}
+  return 0;
+}
+
+function checkStreak(){
+  const p=getProgress();
+  const today=new Date().toDateString();
+  if(p.lastDate===today) return p;
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  if(p.lastDate===yesterday){p.streak++;} else {p.streak=1;}
+  p.lastDate=today;
+  saveProgress(p);
+  return p;
+}
+
+function awardXP(amount){
+  const p=getProgress();
+  const oldLevel=getLevel(p.totalXP);
+  p.totalXP+=amount;
+  p.completed++;
+  saveProgress(p);
+  const newLevel=getLevel(p.totalXP);
+  if(newLevel>oldLevel){
+    // Level up!
+    const box=document.getElementById('level-box');
+    if(box){box.classList.remove('level-up-anim');void box.offsetWidth;box.classList.add('level-up-anim');}
+    soundLevelUp();setTimeout(()=>showLevelUpToast(LEVELS[newLevel]),200);
+  }
+  updateHUD();
+}
+
+function showLevelUpToast(level){
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:99999;background:#0a140a;border:4px solid #ffd040;padding:20px 28px;text-align:center;box-shadow:6px 6px 0 #000;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);';
+  t.innerHTML=`<div style="font-size:32px;margin-bottom:8px">${level.icon}</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#ffd040;line-height:2;">LEVEL UP!</div>
+    <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#fff;line-height:2;margin-top:4px;">${level.name.replace('\n',' ')}</div>`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.style.transform='translate(-50%,-50%) scale(1)',50);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.5s';setTimeout(()=>t.remove(),500);},2500);
+}
+
+function updateHUD(){
+  const p=checkStreak();
+  const lvlIdx=getLevel(p.totalXP);
+  const lvl=LEVELS[lvlIdx];
+  const nextLvl=LEVELS[Math.min(lvlIdx+1,LEVELS.length-1)];
+  const xpInLevel=p.totalXP-lvl.xp;
+  const xpNeeded=nextLvl.xp-lvl.xp;
+  const pct=lvlIdx>=LEVELS.length-1?100:Math.min(100,Math.round(xpInLevel/xpNeeded*100));
+
+  const sc=document.getElementById('streak-count');
+  const sl=document.getElementById('streak-label');
+  const si=document.getElementById('streak-icon');
+  const ln=document.getElementById('level-name');
+  const li=document.getElementById('level-icon');
+  const lx=document.getElementById('level-xp');
+  const xb=document.getElementById('xp-bar');
+
+  if(sc) sc.textContent=p.streak+' DAY'+(p.streak!==1?'S':'');
+  if(sl) sl.textContent='STREAK';
+  if(si) si.textContent=p.streak>=7?'🔥':p.streak>=3?'⚡':'📅';
+  if(ln) ln.innerHTML=lvl.name.replace('\n','<br>');
+  if(li) li.textContent=lvl.icon;
+  if(lx) lx.textContent=lvlIdx>=LEVELS.length-1?'MAX LEVEL':p.totalXP+' / '+nextLvl.xp+' XP';
+  if(xb) xb.style.width=pct+'%';
+}
+
+
+// ── SOUND EFFECTS (Web Audio API — no files needed) ───────────────────────
+let audioCtx=null;
+function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+
+function playTone(freq,dur,type='square',vol=0.15,detune=0){
+  try{
+    const ctx=getAudio();
+    const o=ctx.createOscillator();
+    const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type=type;o.frequency.setValueAtTime(freq,ctx.currentTime);
+    o.detune.setValueAtTime(detune,ctx.currentTime);
+    g.gain.setValueAtTime(vol,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+dur);
+  }catch(e){}
+}
+
+function soundOpen(){
+  // Chest opening — rising arpeggio
+  [261,329,392,523].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'square',0.12),i*70));
+  setTimeout(()=>playTone(784,0.3,'square',0.1),320);
+}
+function soundReveal(){
+  // Mission reveal — sparkle
+  [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.12,'sine',0.1),i*50));
+}
+function soundJump(){
+  // Character jump — boing
+  try{
+    const ctx=getAudio();
+    const o=ctx.createOscillator();
+    const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sine';
+    o.frequency.setValueAtTime(200,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(600,ctx.currentTime+0.15);
+    g.gain.setValueAtTime(0.15,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.25);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.25);
+  }catch(e){}
+}
+function soundCat(){
+  // Cat bounce — meow-ish
+  try{
+    const ctx=getAudio();
+    const o=ctx.createOscillator();
+    const g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(400,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(300,ctx.currentTime+0.2);
+    g.gain.setValueAtTime(0.08,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.25);
+    o.start(ctx.currentTime);o.stop(ctx.currentTime+0.25);
+  }catch(e){}
+}
+function soundLevelUp(){
+  // Level up fanfare
+  const notes=[523,659,784,1047,784,1047,1319];
+  notes.forEach((f,i)=>setTimeout(()=>playTone(f,0.18,'square',0.12),i*80));
+}
+function soundBtn(){
+  playTone(440,0.08,'square',0.1);
+}
+
 window.addEventListener("load",()=>{
+  updateHUD();
+  showSplash();
   drawLandscape();
   drawPixels(document.getElementById("gigi"),GIGI_PIX,GIGI_PAL,5);
   drawPixels(document.getElementById("garrett"),GARRETT_PIX,GARRETT_PAL,5);
@@ -266,7 +617,7 @@ window.addEventListener("load",()=>{
   window.addEventListener("resize",drawLandscape);
 });
 if("serviceWorker" in navigator){
-  const sw=`self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>clients.claim());self.addEventListener("fetch",e=>{if(e.request.url.includes("quiet-wood-bf2f.carlagsaavedra.workers.dev")||e.request.url.includes("fonts.googleapis"))return;e.respondWith(caches.open("v1").then(c=>c.match(e.request).then(r=>r||(fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;})))))});`;
+  const sw=`self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>clients.claim());self.addEventListener("fetch",e=>{if(e.request.url.includes("https://quiet-wood-bf2f.carlagsaavedra.workers.dev")||e.request.url.includes("fonts.googleapis"))return;e.respondWith(caches.open("v1").then(c=>c.match(e.request).then(r=>r||(fetch(e.request).then(res=>{c.put(e.request,res.clone());return res;})))))});`;
   const blob=new Blob([sw],{type:"application/javascript"});
   navigator.serviceWorker.register(URL.createObjectURL(blob),{scope:"./"}).catch(()=>{});
 }
